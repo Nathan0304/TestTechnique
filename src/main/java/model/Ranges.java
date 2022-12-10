@@ -1,13 +1,16 @@
-package main.java.model;
+package model;
 
 import java.util.Objects;
 
 public class Ranges {
-    private int lowerBound;
-    private int upperBound;
-    private char label;
+    private final int lowerBound;
+    private final int upperBound;
+    private final char label;
 
     public Ranges(int lowerBound, int upperBound, char label) {
+        if(upperBound<lowerBound){
+            throw new ArithmeticException("La limite superieure doit etre superieur a la borne inferieure");
+        }
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
         this.label = label;
@@ -29,20 +32,13 @@ public class Ranges {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Ranges ranges = (Ranges) o;
-
-        if (lowerBound != ranges.lowerBound) return false;
-        if (upperBound != ranges.upperBound) return false;
-        return label == ranges.label;
+        return lowerBound == ranges.lowerBound && upperBound == ranges.upperBound && label == ranges.label;
     }
 
     @Override
     public int hashCode() {
-        int result = lowerBound;
-        result = 31 * result + upperBound;
-        result = 31 * result + (int) label;
-        return result;
+        return Objects.hash(lowerBound, upperBound, label);
     }
 
     public boolean isInInterval(int item){

@@ -1,16 +1,39 @@
 package utils;
 
-import java.io.InputStream;
+import model.Ranges;
 
-public class fileReader {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-    public void readFile(String fileName) {
-        String expectedData = "Hello, world!";
+public class FileReaderPerso {
 
-        Class clazz = FileOperationsTest.class;
-        InputStream inputStream = clazz.getResourceAsStream("/fileTest.txt");
-        String data = readFromInputStream(inputStream);
+    public List<Ranges> readFileListeIntervals(String fileName) throws IOException {
+        List<Ranges> newRangesList = new ArrayList<>();
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName));){
+            String currentLine = reader.readLine();
+            while (currentLine != null) {
+                String[] fileRange = currentLine.split(",");
+                Ranges newRange = new Ranges(Integer.parseInt(fileRange[0]), Integer.parseInt(fileRange[1]), fileRange[2].charAt(0));
+                newRangesList.add(newRange);
+                currentLine = reader.readLine();
+            }
+        }
+        return newRangesList;
+    }
 
-        Assert.assertThat(data, containsString(expectedData));
+    public List<Integer> readFileListeItems(String fileName) throws IOException {
+        List<Integer> newItemsList = new ArrayList<>();
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName));){
+            String currentLine = reader.readLine();
+            while (currentLine != null) {
+                newItemsList.add(Integer.valueOf(currentLine));
+                currentLine = reader.readLine();
+            }
+        }
+
+        return newItemsList;
     }
 }
